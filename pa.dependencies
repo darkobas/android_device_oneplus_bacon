@@ -5,6 +5,21 @@
     "revision": "cm-12.0"
   },
   {
+    "repository": "CyanogenMod/android_device_qcom_common",
+    "target_path": "device/qcom/common",
+    "revision": "cm-12.0"
+  },
+  {
+    "repository": "TheMuppets/proprietary_vendor_oppo",
+    "target_path": "vendor/oppo",
+    "revision": "cm-12.0"
+  },
+  {
+    "repository": "TheMuppets/proprietary_vendor_oneplus",
+    "target_path": "vendor/oneplus",
+    "revision": "cm-12.0"
+  },
+  {
     "repository": "Aospa-Legacy/android_kernel_oneplus_msm8974",
     "target_path": "kernel/oneplus/msm8974"
   }
