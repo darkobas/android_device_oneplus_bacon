@@ -5,9 +5,9 @@
     "revision": "L"
   },
   {
-    "repository": "CyanogenMod/android_device_oppo_common",
+    "repository": "darkobas/android_device_oppo_common",
     "target_path": "device/oppo/common",
-    "revision": "cm-12.0"
+    "revision": "L"
   },
   {
     "repository": "CyanogenMod/android_device_qcom_common",
