@@ -136,13 +136,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapminfree=2m
 
-# Reduce client buffer size for fast audio output tracks
-PRODUCT_PROPERTY_OVERRIDES += \
-    af.fast_track_multiplier=1
-
-# Low latency audio buffer size in frames
-PRODUCT_PROPERTY_OVERRIDES += \
-    audio_hal.period_size=192
 PRODUCT_PACKAGES += \
     audiod \
     audio.a2dp.default \
@@ -156,7 +149,7 @@ PRODUCT_PACKAGES += \
     tinymix
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    mm.enable.smoothstreaming=false \
+    mm.enable.smoothstreaming=true \
     ro.qc.sdk.audio.fluencetype=fluence \
     persist.audio.fluence.voicecall=true \
     audio.offload.buffer.size.kb=32 \
