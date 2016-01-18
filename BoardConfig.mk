@@ -44,7 +44,6 @@ TARGET_LIBINIT_DEFINES_FILE := device/oneplus/bacon/init/init_bacon.cpp
 # RIL
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 COMMON_GLOBAL_CPPFLAGS += -DNO_SECURE_DISCARD
-FEATURE_QCRIL_UIM_SAP_SERVER_MODE := true
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := false
@@ -67,6 +66,7 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/oneplus/bacon/bluetooth
 BOARD_HAVE_BLUETOOTH_QCOM := true
 QCOM_BT_USE_SMD_TTY := true
 BLUETOOTH_HCI_USE_MCT := true
+FEATURE_QCRIL_UIM_SAP_SERVER_MODE := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
@@ -79,7 +79,6 @@ TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 # Graphics
 BOARD_EGL_CFG := device/qcom/msm8974/egl.cfg
 TARGET_CONTINUOUS_SPLASH_ENABLED := true
-HAVE_ADRENO_SOURCE := false
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
@@ -129,7 +128,6 @@ BOARD_NFC_CHIPSET := pn547
 BOARD_HAS_QCOM_WLAN              := true
 BOARD_HAS_QCOM_WLAN_SDK          := true
 BOARD_WLAN_DEVICE                := qcwcn
-#CONFIG_EAP_PROXY                 := qmi
 BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
 BOARD_HOSTAPD_DRIVER             := NL80211
@@ -144,7 +142,9 @@ WPA_SUPPLICANT_VERSION           := VER_0_8_X
 
 # Recovery
 TARGET_RECOVERY_FSTAB := device/oneplus/bacon/rootdir/etc/fstab.bacon
-BOARD_VOLD_CRYPTFS_MIGRATE := true
+
+# Enable Minikin text layout engine (will be the default soon)
+USE_MINIKIN := true
 
 # Sepolicy
 include device/qcom/sepolicy/sepolicy.mk

@@ -59,9 +59,6 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 DEVICE_PACKAGE_OVERLAYS += device/oneplus/bacon/overlay
 PRODUCT_PACKAGE_OVERLAYS += device/oneplus/bacon/overlay
 
-# Haters gonna hate..
-PRODUCT_CHARACTERISTICS := nosdcard
-
 # ANT+
 PRODUCT_PACKAGES += \
     com.dsi.ant.antradio_library
@@ -105,13 +102,6 @@ PRODUCT_PACKAGES += \
     keystore.msm8974 \
     keystore.qcom
 
-# USB
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
-
-PRODUCT_PACKAGES += \
-    com.android.future.usb.accessory
-
 # Wi-Fi
 PRODUCT_PACKAGES += \
     wcnss_service
@@ -119,10 +109,6 @@ PRODUCT_PACKAGES += \
  # IO Scheduler
  PRODUCT_PROPERTY_OVERRIDES += \
     sys.io.scheduler=deadline
-
-# # Graphics
-#PRODUCT_PACKAGES += \
-    libboringssl-compat
 
 # Limit dex2oat threads to improve thermals
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -132,10 +118,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
  # System properties
  PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.qmi.adb_logmask=0
-
-# Dalvik/HWUI
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.heapminfree=2m
 
 PRODUCT_PACKAGES += \
     audiod \
