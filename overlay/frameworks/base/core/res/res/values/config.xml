@@ -443,6 +443,4 @@
         <item>SUPL_ES=0</item>
     </string-array>
 
-    <!-- Disable Menu key on keyguard -->
-    <bool name="config_disableMenuKeyInLockScreen">true</bool>
 </resources>
