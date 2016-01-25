@@ -34,7 +34,7 @@ PRODUCT_PACKAGES += \
     libinit_bacon \
     fstab.bacon \
     init.bacon.rc \
-    init.qcom.bacon.rc \
+    init.qcom.power.rc \
     init.qcom.usb.rc \
     init.recovery.qcom.rc \
     init.custom.rc \
@@ -128,7 +128,7 @@ PRODUCT_PACKAGES += \
     tinymix
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    mm.enable.smoothstreaming=false \
+    mm.enable.smoothstreaming=true \
     ro.qc.sdk.audio.fluencetype=fluence \
     persist.audio.fluence.voicecall=true \
     audio.offload.buffer.size.kb=32 \
