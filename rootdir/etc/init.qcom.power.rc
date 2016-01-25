@@ -77,7 +77,7 @@ on enable-low-power
     write /dev/cpuctl/cpu.notify_on_migrate 0
 
     start mpdecision
-    setprop sys.io.scheduler cfq
+    setprop sys.io.scheduler "cfq"
 
 on charger
     write /sys/module/lpm_levels/enable_low_power/l2 2
