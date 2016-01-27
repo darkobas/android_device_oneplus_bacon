@@ -129,8 +129,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     mm.enable.smoothstreaming=false \
-    ro.qc.sdk.audio.fluencetype=fluence \
-    persist.audio.fluence.voicecall=true \
+    ro.qc.sdk.audio.fluencetype=none \
+    persist.audio.fluence.voicecall=false \
     audio.offload.buffer.size.kb=32 \
     audio.offload.video=true \
     av.streaming.offload.enable=true \
