@@ -423,4 +423,6 @@
         <item>SUPL_ES=1</item>
     </string-array>
 
+    <bool name="config_showOperatorNameInStatusBar">true</bool>
+
 </resources>
