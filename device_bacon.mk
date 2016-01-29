@@ -104,7 +104,9 @@ PRODUCT_PACKAGES += \
 
 # Wi-Fi
 PRODUCT_PACKAGES += \
-    wcnss_service
+    wcnss_service \
+    wpa_supplicant \
+    wpa_supplicant.conf
 
 # Limit dex2oat threads to improve thermals
 PRODUCT_PROPERTY_OVERRIDES += \
