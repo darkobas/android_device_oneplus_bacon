@@ -10,7 +10,7 @@
 /data/cam_socket2                                       u:object_r:camera_socket:s0
 
 # Vibrator config
-/sys/devices/virtual/timed_output/vibrator/vtg_level    u:object_r:vibeamp_sysfs:s0
+/sys/devices/virtual/timed_output/vibrator(/.*)?	u:object_r:sysfs_vibrator:s0
 
 # BT/WiFi MAC
 /persist/.genmac                                        u:object_r:wifi_data_file:s0

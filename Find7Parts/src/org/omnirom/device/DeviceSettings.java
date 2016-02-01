@@ -33,6 +33,7 @@ public class DeviceSettings extends PreferenceActivity implements OnPreferenceCh
     public static final String KEY_CAMERA_SWITCH = "camera";
     public static final String KEY_MUSIC_SWITCH = "music";
     public static final String KEY_TORCH_SWITCH = "torch";
+    public static final String KEY_VIBSTRENGTH = "vib_strength";
 
     private static final String KEY_HAPTIC_FEEDBACK = "touchscreen_gesture_haptic_feedback";
 
@@ -40,6 +41,7 @@ public class DeviceSettings extends PreferenceActivity implements OnPreferenceCh
     private TwoStatePreference mCameraSwitch;
     private TwoStatePreference mMusicSwitch;
     private TwoStatePreference mTorchSwitch;
+    private VibratorStrengthPreference mVibratorStrength;
 
     private SwitchPreference mHapticFeedback;
 
@@ -62,6 +64,9 @@ public class DeviceSettings extends PreferenceActivity implements OnPreferenceCh
         mCameraSwitch.setEnabled(CameraGestureSwitch.isSupported());
         mCameraSwitch.setChecked(CameraGestureSwitch.isEnabled(this));
         mCameraSwitch.setOnPreferenceChangeListener(new CameraGestureSwitch());
+
+	mVibratorStrength = (VibratorStrengthPreference) findPreference(KEY_VIBSTRENGTH);
+        mVibratorStrength.setEnabled(VibratorStrengthPreference.isSupported());
 
         mMusicSwitch = (TwoStatePreference) findPreference(KEY_MUSIC_SWITCH);
         mMusicSwitch.setEnabled(MusicGestureSwitch.isSupported());
