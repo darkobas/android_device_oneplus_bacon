@@ -130,12 +130,12 @@ PRODUCT_PACKAGES += \
     tinymix
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    mm.enable.smoothstreaming=false \
+    mm.enable.smoothstreaming=true \
     ro.qc.sdk.audio.fluencetype=none \
     persist.audio.fluence.voicecall=false \
     audio.offload.buffer.size.kb=32 \
     audio.offload.video=true \
-    av.streaming.offload.enable=true \
+    av.streaming.offload.enable=false \
     use.voice.path.for.pcm.voip=true \
     audio.offload.multiple.enabled=false \
     audio.offload.gapless.enabled=true \
