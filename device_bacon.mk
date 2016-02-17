@@ -27,7 +27,7 @@ PRODUCT_COPY_FILES += \
 
 # CAF branch
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.par.branch=LA.BF.1.1.3-00910-8x74.0
+    ro.par.branch=LA.BF.1.1.3-01010-8x74.0
 
 # Ramdisk
 PRODUCT_PACKAGES += \
