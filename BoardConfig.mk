@@ -154,9 +154,6 @@ TARGET_RECOVERY_FSTAB := device/oneplus/bacon/rootdir/etc/fstab.bacon
 # Enable Minikin text layout engine (will be the default soon)
 USE_MINIKIN := true
 
-# Disable secure discard because it's SLOW
-BOARD_SUPPRESS_SECURE_ERASE := true
-
 # Sepolicy
 include device/qcom/sepolicy/sepolicy.mk
 
