@@ -40,10 +40,10 @@
     <ctl name="ADC5 Volume" value="0" />
     <ctl name="ADC6 Volume" value="0" />
     <ctl name="DEC1 Volume" value="0" />
-    <ctl name="DEC2 Volume" value="84" />
-    <ctl name="DEC3 Volume" value="84" />
-    <ctl name="DEC4 Volume" value="84" />
-    <ctl name="DEC5 Volume" value="84" />
+    <ctl name="DEC2 Volume" value="92" />
+    <ctl name="DEC3 Volume" value="92" />
+    <ctl name="DEC4 Volume" value="92" />
+    <ctl name="DEC5 Volume" value="92" />
     <ctl name="DEC6 Volume" value="0" />
     <ctl name="DEC7 Volume" value="0" />
     <ctl name="DEC8 Volume" value="0" />
@@ -689,7 +689,7 @@
     <path name="ear">
         <ctl name="RX1 MIX1 INP1" value="RX1" />
         <ctl name="CLASS_H_DSM MUX" value="DSM_HPHL_RX1" />
-        <ctl name="RX1 Digital Volume" value="110" />
+        <ctl name="RX1 Digital Volume" value="96" />
         <ctl name="EAR PA Gain" value="POS_0_DB" />
         <ctl name="DAC1 Switch" value="1" />
     </path>
@@ -785,8 +785,8 @@
 
     <path name="sec-mic">
         <ctl name="DEC3 MUX" value="ADC4" />
-        <ctl name="ADC4 Volume" value="19" />
-        <ctl name="DEC3 Volume" value="84" />
+        <ctl name="ADC4 Volume" value="24" />
+        <ctl name="DEC3 Volume" value="92" />
     </path>
 
     <path name="anc-mic">
@@ -798,14 +798,14 @@
     <path name="handset-mic">
         <path name="main-mic" />
         <ctl name="SLIM_0_TX Channels" value="One" />
-        <ctl name="ADC3 Volume" value="19" />
+        <ctl name="ADC3 Volume" value="24" />
     </path>
 
     <path name="speaker-mic">
         <ctl name="AIF1_CAP Mixer SLIM TX7" value="1" />
         <ctl name="SLIM_0_TX Channels" value="One" />
         <ctl name="SLIM TX7 MUX" value="DEC3" />
-        <ctl name="ADC5 Volume" value="19" />
+        <ctl name="ADC5 Volume" value="24" />
         <path name="sec-mic" />
     </path>
 
@@ -813,14 +813,14 @@
         <ctl name="AIF1_CAP Mixer SLIM TX7" value="1"/>
         <ctl name="SLIM_0_TX Channels" value="One" />
         <ctl name="SLIM TX7 MUX" value="DEC5" />
-        <ctl name="ADC2 Volume" value="13" />
+        <ctl name="ADC2 Volume" value="19" />
         <path name="hph-mic" />
     </path>
 
     <path name="voice-rec-mic">
         <path name="main-mic" />
         <ctl name="SLIM_0_TX Channels" value="One" />
-        <ctl name="ADC3 Volume" value="19" />
+        <ctl name="ADC3 Volume" value="24" />
     </path>
 
     <path name="voice-speaker-mic">
@@ -880,8 +880,8 @@
 
     <path name="dmic-endfire">
         <path name="handset-dmic" />
-        <ctl name="ADC3 Volume" value="9" />
-        <ctl name="ADC4 Volume" value="9" />
+        <ctl name="ADC3 Volume" value="13" />
+        <ctl name="ADC4 Volume" value="13" />
     </path>
 
     <path name="voice-dmic-ef">
@@ -903,8 +903,8 @@
 
     <path name="handset-stereo-dmic-ef">
         <path name="handset-dmic" />
-        <ctl name="ADC3 Volume" value="19" />
-        <ctl name="ADC4 Volume" value="19" />
+        <ctl name="ADC3 Volume" value="24" />
+        <ctl name="ADC4 Volume" value="24" />
     </path>
 
     <path name="camcorder-mic">
