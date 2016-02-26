@@ -158,5 +158,3 @@ ro.hwui.text_large_cache_height=1024
 
 # msm8974: Disable strict mode
 persist.sys.strictmode.disable=true
-
-audio.deep_buffer.media=1
