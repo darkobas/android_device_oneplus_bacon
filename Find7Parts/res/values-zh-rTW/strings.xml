@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2014 The OmniROM Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="app_name">One</string>
+    <string name="category_gestures_title">手勢</string>
+    <string name="double_tap_wake_title_head">點擊兩下開啟</string>
+    <string name="double_tap_wake_summary_head">在螢幕上點兩下將會打開螢幕</string>
+    <string name="camera_title_head">相機</string>
+    <string name="camera_summary_head">畫"O"來啟動相機</string>
+    <string name="music_title_head">音樂</string>
+    <string name="music_summary_head">使用手勢控制音樂撥放 \n
+    • 兩隻手指垂直畫以切換播放與暫停\n
+    • 向左箭頭播放上一首\n
+    • 向右箭頭播放下一首</string>
+    <string name="key_disabler_title_head">啟動虛擬鍵</string>
+    <string name="key_disabler_summary_head">將會以虛擬鍵取代實體鍵</string>
+    <string name="offscreen_gestures_settings">手勢</string>
+    <string name="torch_title_head">手電筒</string>
+    <string name="torch_summary_head">畫"V"來啟動手電筒</string>
+    <!-- haptic feedback  -->
+    <string name="touchscreen_extras">額外</string>
+    <string name="haptic_feedback">觸覺回饋</string>
+    <string name="haptic_feedback_summary">當偵測到手勢時震動</string>
+    <!-- Proximity wake -->
+    <string name="proximity_wake_title">防止意外啟動</string>
+    <string name="proximity_wake_summary">在打開螢幕前先檢查距離感測器</string>
+    <string name="category_vibrator">震動</string>
+    <string name="vib_strength_title_head">強度</string>
+    <string name="vib_strength_summary_head">設定震動器的強度</string>
+    <string name="vib_test">測試</string>
+</resources>
