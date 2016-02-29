@@ -154,6 +154,8 @@ TARGET_RECOVERY_FSTAB := device/oneplus/bacon/rootdir/etc/fstab.bacon
 # Enable Minikin text layout engine (will be the default soon)
 USE_MINIKIN := true
 
+TARGET_KERNEL_HAVE_NTFS := true
+
 # Sepolicy
 include device/qcom/sepolicy/sepolicy.mk
 
