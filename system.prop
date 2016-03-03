@@ -162,7 +162,6 @@ persist.sys.strictmode.disable=true
 # Media
 af.fast_track_multiplier=1
 audio_hal.period_size=192
-use.voice.path.for.pcm.voip=true
 
 av.streaming.offload.enable=false
 audio.offload.buffer.size.kb=32
@@ -180,6 +179,7 @@ ro.qc.sdk.audio.fluencetype=fluence
 persist.audio.fluence.voicecall=true 
 persist.audio.fluence.voicerec=false 
 persist.audio.fluence.speaker=false 
+use.dedicated.device.for.voip=true
 
 # Camera
 camera2.portability.force_api=1
