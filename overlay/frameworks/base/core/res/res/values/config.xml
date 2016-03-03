@@ -398,6 +398,8 @@
         <item>power</item>
         <item>reboot</item>
         <item>airplane</item>
+        <item>screenshot</item>
+        <item>screenrecord</item>
         <item>users</item>
         <item>silent</item>
         <item>dnd</item>
