@@ -128,20 +128,3 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     tinymix
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    mm.enable.smoothstreaming=true \
-    ro.qc.sdk.audio.fluencetype=fluence \
-    persist.audio.fluence.voicecall=true \
-    persist.audio.fluence.voicerec=false \
-    persist.audio.fluence.speaker=false \
-    audio.offload.buffer.size.kb=32 \
-    audio.offload.video=false \
-    av.streaming.offload.enable=true \
-    use.voice.path.for.pcm.voip=true \
-    audio.offload.multiple.enabled=false \
-    audio.offload.gapless.enabled=true \
-    media.aac_51_output_enabled=true \
-    audio.offload.pcm.16bit.enable=false \
-    audio.offload.pcm.24bit.enable=true \
-    audio.deep_buffer.media=true

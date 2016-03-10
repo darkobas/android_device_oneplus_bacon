@@ -3,6 +3,7 @@
 #
 
 ro.sf.lcd_density=480
+persist.hwc.mdpcomp.enable=true
 persist.radio.add_power_save=1
 persist.radio.apm_sim_not_pwdn=1
 rol.ril.ext.ecclist=112,911,999,110,122,119,120,000,08,118
@@ -23,7 +24,7 @@ ro.telephony.call_ring.multiple=0
 ro.vendor.extension_library=libqti-perfd-client.so
 telephony.lteOnGsmDevice=1
 wifi.interface=wlan0
-wifi.supplicant_scan_interval=15
+wifi.supplicant_scan_interval=30
 
 #
 # system.prop for msm8974
@@ -155,6 +156,31 @@ ro.hwui.text_small_cache_height=1024
 ro.hwui.text_large_cache_width=2048
 ro.hwui.text_large_cache_height=1024
 
-
 # msm8974: Disable strict mode
 persist.sys.strictmode.disable=true
+
+# Media
+af.fast_track_multiplier=1
+audio_hal.period_size=192
+use.voice.path.for.pcm.voip=true
+
+av.streaming.offload.enable=false
+audio.offload.buffer.size.kb=32
+audio.offload.video=true
+audio.offload.multiple.enabled=false
+audio.offload.gapless.enabled=true
+audio.offload.pcm.16bit.enable=true
+audio.offload.pcm.24bit.enable=true 
+
+media.aac_51_output_enabled=true
+mm.enable.smoothstreaming=true
+
+#Fluence
+ro.qc.sdk.audio.fluencetype=fluence 
+persist.audio.fluence.voicecall=true 
+persist.audio.fluence.voicerec=false 
+persist.audio.fluence.speaker=false 
+
+# Camera
+camera2.portability.force_api=1
+
