@@ -190,6 +190,8 @@ on boot
     chown system system /sys/kernel/msm_thermal/user_maxfreq
     chmod 0660 /sys/kernel/msm_thermal/user_maxfreq
 
+    chown system system /data/misc/zoneinfo/current/icu/icu_tzdata.dat
+
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
 
