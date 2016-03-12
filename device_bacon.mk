@@ -77,6 +77,9 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui
 PRODUCT_PACKAGES += \
     Find7Parts
 
+# never dexopt the keyhandler
+$(call add-product-dex-preopt-module-config,Find7Parts,disable)
+
 # GPS
 PRODUCT_PACKAGES += \
     gps.msm8974

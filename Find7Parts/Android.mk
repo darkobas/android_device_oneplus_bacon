@@ -9,9 +9,6 @@ LOCAL_PACKAGE_NAME := Find7Parts
 LOCAL_CERTIFICATE := platform
 LOCAL_DEX_PREOPT := false
 
-# Required so that symbols used by the jni library doesn't get stripped out
-LOCAL_PROGUARD_ENABLED := disabled
-
 include $(BUILD_PACKAGE)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
