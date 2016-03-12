@@ -50,6 +50,8 @@ COMMON_GLOBAL_CPPFLAGS += -DNO_SECURE_DISCARD
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := false
+TARGET_USES_QCOM_BSP := true
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
@@ -154,6 +156,8 @@ TARGET_RECOVERY_FSTAB := device/oneplus/bacon/rootdir/etc/fstab.bacon
 USE_MINIKIN := true
 
 TARGET_KERNEL_HAVE_NTFS := true
+
+WITH_DEXPREOPT := true
 
 # Sepolicy
 include device/qcom/sepolicy/sepolicy.mk
