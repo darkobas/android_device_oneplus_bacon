@@ -26,9 +26,9 @@ telephony.lteOnGsmDevice=1
 wifi.interface=wlan0
 wifi.supplicant_scan_interval=30
 
-#
-# system.prop for msm8974
-#
+# Media
+af.fast_track_multiplier=1
+audio_hal.period_size=192
 
 rild.libpath=/vendor/lib/libril-qc-qmi-1.so
 rild.libargs=-d /dev/smd0
@@ -140,9 +140,6 @@ persist.debug.wfd.enable=1
 persist.sys.wfd.virtual=0
 #tunnel.audio.encode=true
 
-#enable voice path for PCM VoIP by default
-use.voice.path.for.pcm.voip=true
-
 #hwui properties
 ro.hwui.texture_cache_size=72
 ro.hwui.layer_cache_size=48
@@ -160,9 +157,6 @@ ro.hwui.text_large_cache_height=1024
 persist.sys.strictmode.disable=true
 
 # Media
-af.fast_track_multiplier=1
-audio_hal.period_size=192
-
 av.streaming.offload.enable=false
 audio.offload.buffer.size.kb=32
 audio.offload.video=true
