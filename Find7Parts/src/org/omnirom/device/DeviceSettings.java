@@ -29,7 +29,6 @@ import android.view.MenuItem;
 public class DeviceSettings extends PreferenceActivity implements OnPreferenceChangeListener {
 
     public static final String KEY_DISABLER = "key_disabler";
-    public static final String KEY_DOUBLE_TAP_SWITCH = "double_tap";
     public static final String KEY_CAMERA_SWITCH = "camera";
     public static final String KEY_MUSIC_SWITCH = "music";
     public static final String KEY_TORCH_SWITCH = "torch";
@@ -37,7 +36,6 @@ public class DeviceSettings extends PreferenceActivity implements OnPreferenceCh
 
     private static final String KEY_HAPTIC_FEEDBACK = "touchscreen_gesture_haptic_feedback";
 
-    private TwoStatePreference mDoubleTapSwitch;
     private TwoStatePreference mCameraSwitch;
     private TwoStatePreference mMusicSwitch;
     private TwoStatePreference mTorchSwitch;
@@ -54,11 +52,6 @@ public class DeviceSettings extends PreferenceActivity implements OnPreferenceCh
 
         mHapticFeedback = (SwitchPreference) findPreference(KEY_HAPTIC_FEEDBACK);
         mHapticFeedback.setOnPreferenceChangeListener(this);
-
-        mDoubleTapSwitch = (TwoStatePreference) findPreference(KEY_DOUBLE_TAP_SWITCH);
-        mDoubleTapSwitch.setEnabled(DoubleTapSwitch.isSupported());
-        mDoubleTapSwitch.setChecked(DoubleTapSwitch.isEnabled(this));
-        mDoubleTapSwitch.setOnPreferenceChangeListener(new DoubleTapSwitch());
 
         mCameraSwitch = (TwoStatePreference) findPreference(KEY_CAMERA_SWITCH);
         mCameraSwitch.setEnabled(CameraGestureSwitch.isSupported());
