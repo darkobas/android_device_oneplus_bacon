@@ -203,7 +203,7 @@
          turn the screen on
          NOTE ! - Enable for devices that have a fast response proximity sensor -->
     <bool name="config_proximityCheckOnWake">true</bool>
-    <integer name="config_proximityCheckTimeout">250</integer>
+    <integer name="config_proximityCheckTimeout">100</integer>
     <bool name="config_proximityCheckOnWakeEnabledByDefault">true</bool>
 
     <!-- The list absolute paths of jar/apk files containing the device specific handlers,
