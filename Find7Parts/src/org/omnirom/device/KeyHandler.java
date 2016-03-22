@@ -62,16 +62,17 @@ public class KeyHandler implements DeviceKeyHandler {
     private final Context mContext;
     private final PowerManager mPowerManager;
     private EventHandler mEventHandler;
-    private KeyguardManager mKeyguardManager;
     private Vibrator mVibrator;
 
     private SensorManager mSensorManager;
     private Sensor mProximitySensor;
     WakeLock mProximityWakeLock;
     WakeLock mGestureWakeLock;
+    Message msg;
     private int mProximityTimeOut;
     private boolean mProximityWakeSupported;
     private Handler mHandler = new Handler();
+    private KeyguardManager mKeyguardManager;
     private SettingsObserver mSettingsObserver;
 
     private class SettingsObserver extends ContentObserver {
@@ -124,20 +125,11 @@ public class KeyHandler implements DeviceKeyHandler {
         }
     }
 
-    private void ensureKeyguardManager() {
-        if (mKeyguardManager == null) {
-            mKeyguardManager =
-                    (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
-        }
-    }
-
     private class EventHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            KeyEvent event = (KeyEvent) msg.obj;
-            switch(event.getScanCode()) {
+            switch (msg.arg1) {
             case GESTURE_CIRCLE_SCANCODE:
-                if (DEBUG) Log.i(TAG, "GESTURE_CIRCLE_SCANCODE");
                 ensureKeyguardManager();
                 String action = null;
                 mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
@@ -149,6 +141,7 @@ public class KeyHandler implements DeviceKeyHandler {
                     } catch (RemoteException e) {
                         // Ignore
                     }
+                    doHapticFeedback();
                     action = MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA;
                 }
                 mPowerManager.wakeUp(SystemClock.uptimeMillis());
@@ -181,36 +174,40 @@ public class KeyHandler implements DeviceKeyHandler {
         }
     }
 
-    @Override
     public boolean handleKeyEvent(KeyEvent event) {
-        if (event.getAction() != KeyEvent.ACTION_UP) {
+        int scanCode = event.getScanCode();
+        boolean isKeySupported = ArrayUtils.contains(sSupportedGestures, scanCode);
+        if (!isKeySupported) {
             return false;
         }
-        if (DEBUG) Log.i(TAG, "scanCode=" + event.getScanCode());
-        boolean isKeySupported = ArrayUtils.contains(sSupportedGestures, event.getScanCode());
-        if (isKeySupported && !mEventHandler.hasMessages(GESTURE_REQUEST)) {
-            Message msg = getMessageForKeyEvent(event);
+
+        if (event.getAction() != KeyEvent.ACTION_UP) {
+            return true;
+        }
+
+        if (!mEventHandler.hasMessages(GESTURE_REQUEST)) {
+            Message msg = getMessageForKeyEvent(scanCode);
             boolean defaultProximity = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_proximityCheckOnWakeEnabledByDefault);
             boolean proximityWakeCheckEnabled = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.PROXIMITY_ON_WAKE, defaultProximity ? 1 : 0) == 1;
             if (mProximityWakeSupported && proximityWakeCheckEnabled && mProximitySensor != null) {
                 mEventHandler.sendMessageDelayed(msg, mProximityTimeOut);
-                processEvent(event);
+                processEvent(scanCode);
             } else {
                 mEventHandler.sendMessage(msg);
             }
         }
-        return isKeySupported;
+        return true;
     }
 
-    private Message getMessageForKeyEvent(KeyEvent keyEvent) {
+    private Message getMessageForKeyEvent(int scancode) {
         Message msg = mEventHandler.obtainMessage(GESTURE_REQUEST);
-        msg.obj = keyEvent;
+        msg.arg1 = scancode;
         return msg;
     }
 
-    private void processEvent(final KeyEvent keyEvent) {
+    private void processEvent(final int scancode) {
         mProximityWakeLock.acquire();
         mSensorManager.registerListener(new SensorEventListener() {
             @Override
@@ -223,7 +220,7 @@ public class KeyHandler implements DeviceKeyHandler {
                 }
                 mEventHandler.removeMessages(GESTURE_REQUEST);
                 if (event.values[0] == mProximitySensor.getMaximumRange()) {
-                    Message msg = getMessageForKeyEvent(keyEvent);
+                    Message msg = getMessageForKeyEvent(scancode);
                     mEventHandler.sendMessage(msg);
                 }
             }
@@ -260,6 +257,13 @@ public class KeyHandler implements DeviceKeyHandler {
         }
     }
 
+    private void ensureKeyguardManager() {
+        if (mKeyguardManager == null) {
+            mKeyguardManager =
+                    (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+        }
+    }
+
     private void doHapticFeedback() {
         if (mVibrator == null) {
             return;
@@ -278,4 +282,3 @@ public class KeyHandler implements DeviceKeyHandler {
         Utils.writeValue(BUTTON_DISABLE_FILE, disableButtons ? "0" : "1");
     }
 }
-

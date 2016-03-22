@@ -157,7 +157,7 @@ USE_MINIKIN := true
 
 TARGET_KERNEL_HAVE_NTFS := true
 
-WITH_DEXPREOPT := true
+#WITH_DEXPREOPT := true
 
 # Sepolicy
 include device/qcom/sepolicy/sepolicy.mk

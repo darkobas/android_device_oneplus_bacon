@@ -92,6 +92,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/etc/permissions/com.dsi.ant.antradio_library.xml
 
+# Camera
+PRODUCT_PROPERTY_OVERRIDES += \
+    camera2.portability.force_api=1
+
+PRODUCT_PACKAGES += \
+    camera-wrapper.msm8974 
+
 # Codecs
 PRODUCT_COPY_FILES += \
     device/oneplus/bacon/prebuilt/system/etc/media_codecs_performance.xml:system/etc/media_codecs_performance.xml
