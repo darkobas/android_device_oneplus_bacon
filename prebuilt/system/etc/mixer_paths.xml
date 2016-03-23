@@ -881,7 +881,7 @@
     <path name="dmic-endfire">
         <path name="handset-dmic" />
         <ctl name="ADC3 Volume" value="11" />
-        <ctl name="ADC4 Volume" value=".13" />
+        <ctl name="ADC4 Volume" value="11" />
     </path>
 
     <path name="voice-dmic-ef">
@@ -897,8 +897,8 @@
         <ctl name="DEC4 MUX" value="ADC3" />
         <ctl name="SLIM TX8 MUX" value="DEC2" />
         <ctl name="DEC2 MUX" value="ADC5" />
-        <ctl name="ADC3 Volume" value="19" />
-        <ctl name="ADC5 Volume" value="19" />
+        <ctl name="ADC3 Volume" value="21" />
+        <ctl name="ADC5 Volume" value="21" />
     </path>
 
     <path name="handset-stereo-dmic-ef">
