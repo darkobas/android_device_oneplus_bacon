@@ -50,14 +50,23 @@ public class KeyHandler implements DeviceKeyHandler {
     private static final int GESTURE_V_SCANCODE = 252;
     private static final int GESTURE_LTR_SCANCODE = 253;
     private static final int GESTURE_GTR_SCANCODE = 254;
-
+    private static final int KEY_DOUBLE_TAP = 255;
 
     private static final int[] sSupportedGestures = new int[]{
         GESTURE_CIRCLE_SCANCODE,
         GESTURE_SWIPE_DOWN_SCANCODE,
         GESTURE_LTR_SCANCODE,
         GESTURE_GTR_SCANCODE,
-        GESTURE_V_SCANCODE
+        GESTURE_V_SCANCODE,
+        KEY_DOUBLE_TAP
+    };
+
+    private static final int[] sHandledGestures = new int[]{
+        GESTURE_SWIPE_DOWN_SCANCODE,
+        GESTURE_LTR_SCANCODE,
+        GESTURE_GTR_SCANCODE,
+        GESTURE_V_SCANCODE,
+        KEY_DOUBLE_TAP
     };
 
     private final Context mContext;
@@ -130,26 +139,6 @@ public class KeyHandler implements DeviceKeyHandler {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.arg1) {
-            case GESTURE_CIRCLE_SCANCODE:
-                ensureKeyguardManager();
-                String action = null;
-                mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
-                if (mKeyguardManager.isKeyguardSecure() && mKeyguardManager.isKeyguardLocked()) {
-                    action = MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE;
-                } else {
-                    try {
-                        WindowManagerGlobal.getWindowManagerService().dismissKeyguard();
-                    } catch (RemoteException e) {
-                        // Ignore
-                    }
-                    doHapticFeedback();
-                    action = MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA;
-                }
-                mPowerManager.wakeUp(SystemClock.uptimeMillis());
-                Intent intent = new Intent(action, null);
-                startActivitySafely(intent);
-                doHapticFeedback();
-                break;
             case GESTURE_SWIPE_DOWN_SCANCODE:
                 dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
                 doHapticFeedback();
@@ -175,9 +164,15 @@ public class KeyHandler implements DeviceKeyHandler {
         }
     }
 
+    @Override
+    public boolean canHandleKeyEvent(KeyEvent event) {
+        return ArrayUtils.contains(sSupportedGestures, event.getScanCode());
+    }
+
+    @Override
     public boolean handleKeyEvent(KeyEvent event) {
         int scanCode = event.getScanCode();
-        boolean isKeySupported = ArrayUtils.contains(sSupportedGestures, scanCode);
+        boolean isKeySupported = ArrayUtils.contains(sHandledGestures, scanCode);
         if (!isKeySupported) {
             return false;
         }
@@ -245,24 +240,12 @@ public class KeyHandler implements DeviceKeyHandler {
         }
     }
 
-    private void startActivitySafely(Intent intent) {
-        intent.addFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        try {
-            UserHandle user = new UserHandle(UserHandle.USER_CURRENT);
-            mContext.startActivityAsUser(intent, null, user);
-        } catch (ActivityNotFoundException e) {
-            // Ignore
+    @Override
+    public boolean isCameraLaunchEvent(KeyEvent event) {
+        if (event.getAction() != KeyEvent.ACTION_UP) {
+            return false;
         }
-    }
-
-    private void ensureKeyguardManager() {
-        if (mKeyguardManager == null) {
-            mKeyguardManager =
-                    (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
-        }
+        return event.getScanCode() == GESTURE_CIRCLE_SCANCODE;
     }
 
     private void doHapticFeedback() {
