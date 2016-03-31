@@ -1,3 +1,7 @@
 # For text relocations in /system/vendor/lib/libmmjpeg.so
-allow mediaserver system_file:file execmod;;
 allow mediaserver system_file:file execute;
+allow mediaserver system_data_file:sock_file { write };
+allow mediaserver socket_device:sock_file { write };
+# 4k2k property
+allow mediaserver camera_prop:property_service set;
+allow mediaserver system_file:file execmod;
