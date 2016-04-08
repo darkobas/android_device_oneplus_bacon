@@ -16,11 +16,13 @@
 			android:summary="@string/torch_summary_head"
 			android:title="@string/torch_title_head" />
 
-                <SwitchPreference
+                <MultiSelectListPreference
                         android:key="touchscreen_gesture_haptic_feedback"
-                        android:persistent="false"
                         android:title="@string/haptic_feedback"
-                        android:summary="@string/haptic_feedback_summary" />
+                        android:summary="@string/haptic_feedback_summary"
+                        android:entries="@array/haptic_feedback_array_name"
+                        android:entryValues="@array/haptic_feedback_array_value"
+                        android:defaultValue="@array/empty_array" />
 
                 <org.omnirom.device.SystemSettingSwitchPreference
                     android:key="proximity_on_wake"
@@ -36,4 +38,31 @@
 	        android:title="@string/vib_strength_title_head"
 	        android:summary="@string/vib_strength_summary_head" />
 	</PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/touchscreen_action_title">
+		
+        <ListPreference
+			android:key="touchscreen_gesture_torch_launch_intent"
+			android:title="@string/touchscreen_action_title_flashlight"			
+			android:summary="@string/touchscreen_action_title_flashlight_summary"
+			android:enabled="false" />
+			
+        <ListPreference
+			android:key="touchscreen_gesture_play_pause_launch_intent"
+			android:title="@string/touchscreen_action_title_play"			
+			android:summary="@string/touchscreen_action_title_play_summary"
+			android:enabled="false" />
+			
+        <ListPreference
+			android:key="touchscreen_gesture_previous_launch_intent"
+			android:title="@string/touchscreen_action_title_previous"			
+			android:summary="@string/touchscreen_action_title_previous_summary"
+			android:enabled="false" />
+			
+        <ListPreference
+			android:key="touchscreen_gesture_next_launch_intent"
+			android:title="@string/touchscreen_action_title_next"			
+			android:summary="@string/touchscreen_action_title_next_summary"
+			android:enabled="false" />
+      </PreferenceCategory>
 </PreferenceScreen>

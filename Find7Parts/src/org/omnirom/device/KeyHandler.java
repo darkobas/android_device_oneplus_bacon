@@ -1,5 +1,6 @@
 package org.omnirom.device;
 
+import android.content.ActivityNotFoundException;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,23 @@ public class KeyHandler implements DeviceKeyHandler {
 
     private static final String KEY_GESTURE_HAPTIC_FEEDBACK =
             "touchscreen_gesture_haptic_feedback";
+
+    private static final String KEY_TORCH_LAUNCH_INTENT = "touchscreen_gesture_torch_launch_intent";  
+    private static final String KEY_PLAY_PAUSE_LAUNCH_INTENT = 
+			"touchscreen_gesture_play_pause_launch_intent";   
+    private static final String KEY_PREVIOUS_LAUNCH_INTENT = 
+			"touchscreen_gesture_previous_launch_intent"; 
+    private static final String KEY_NEXT_LAUNCH_INTENT = "touchscreen_gesture_next_launch_intent";
+    
+    private static final String KEY_TORCH_FEEDBACK  = "touchscreen_gesture_torch_feedback";    
+    private static final String KEY_PLAY_PAUSE_FEEDBACK  = 
+			"touchscreen_gesture_play_pause_feedback";  
+    private static final String KEY_PREVIOUS_FEEDBACK  = 
+			"touchscreen_gesture_previous_feedback";
+    private static final String KEY_NEXT_FEEDBACK  = "touchscreen_gesture_next_feedback";
+
+    private static final String ACTION_DISMISS_KEYGUARD =
+    "com.android.keyguard.action.DISMISS_KEYGUARD_SECURELY";
 
     private static final String BUTTON_DISABLE_FILE = "/proc/touchpanel/keypad_enable";
 
@@ -132,25 +150,32 @@ public class KeyHandler implements DeviceKeyHandler {
         public void handleMessage(Message msg) {
             switch (msg.arg1) {
             case GESTURE_SWIPE_DOWN_SCANCODE:
-                dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-                doHapticFeedback();
+		if(!launchIntentFromKey(KEY_PLAY_PAUSE_LAUNCH_INTENT)){
+        	    dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+		}
+                doHapticFeedback(KEY_PLAY_PAUSE_FEEDBACK);
                 break;
             case GESTURE_LTR_SCANCODE:
-                dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
-                doHapticFeedback();
+                if(!launchIntentFromKey(KEY_PREVIOUS_LAUNCH_INTENT)){
+                    dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                }
+                doHapticFeedback(KEY_PREVIOUS_FEEDBACK);
                 break;
             case GESTURE_GTR_SCANCODE:
-                dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT);
-                doHapticFeedback();
+                if(!launchIntentFromKey(KEY_NEXT_LAUNCH_INTENT)){
+                    dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT);
+                }
+                doHapticFeedback(KEY_NEXT_FEEDBACK); 
                 break;
             case GESTURE_V_SCANCODE:
-                if (DEBUG) Log.i(TAG, "GESTURE_V_SCANCODE");
-                mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
-                Intent torchIntent = new Intent("com.android.systemui.TOGGLE_FLASHLIGHT");
-                torchIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                UserHandle user = new UserHandle(UserHandle.USER_CURRENT);
-                mContext.sendBroadcastAsUser(torchIntent, user);
-                doHapticFeedback();
+                if (!launchIntentFromKey(KEY_TORCH_LAUNCH_INTENT)){ 
+                    mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
+                    Intent torchIntent = new Intent("com.android.systemui.TOGGLE_FLASHLIGHT");
+                    torchIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                    UserHandle user = new UserHandle(UserHandle.USER_CURRENT);
+                    mContext.sendBroadcastAsUser(torchIntent, user);
+                }
+                doHapticFeedback(KEY_TORCH_FEEDBACK);
                 break;
             }
         }
@@ -240,6 +265,13 @@ public class KeyHandler implements DeviceKeyHandler {
         return event.getScanCode() == GESTURE_CIRCLE_SCANCODE;
     }
 
+    private void doHapticFeedback(String key) {
+        boolean enabled = Settings.System.getInt(mContext.getContentResolver(), key, 0) != 0;
+        if(enabled){
+			doHapticFeedback();
+		}
+    }
+
     private void doHapticFeedback() {
         if (mVibrator == null) {
             return;
@@ -257,4 +289,33 @@ public class KeyHandler implements DeviceKeyHandler {
         if (DEBUG) Log.i(TAG, "setButtonDisable=" + disableButtons);
         Utils.writeValue(BUTTON_DISABLE_FILE, disableButtons ? "0" : "1");
     }
+
+        private void startActivitySafely(Intent intent) {
+            intent.addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK
+            | Intent.FLAG_ACTIVITY_SINGLE_TOP
+            | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            try {
+                UserHandle user = new UserHandle(UserHandle.USER_CURRENT);
+                mContext.startActivityAsUser(intent, null, user);
+            } catch (ActivityNotFoundException e) {
+                // Ignore
+            }
+        }
+
+        private boolean launchIntentFromKey(String key){
+            String packageName = Settings.System.getString(mContext.getContentResolver(), key);
+            Intent intent = null;
+            if(packageName != null && !packageName.equals("")){
+                intent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
+            }
+            if(intent != null){
+                mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
+                mPowerManager.wakeUp(SystemClock.uptimeMillis());
+                mContext.sendBroadcastAsUser(new Intent(ACTION_DISMISS_KEYGUARD), UserHandle.CURRENT);
+                startActivitySafely(intent);
+                return true;
+            }
+            return false;
+        }
 }

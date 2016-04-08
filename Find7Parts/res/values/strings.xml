@@ -31,7 +31,7 @@
     <string name="torch_title_head">Torch</string>
     <string name="torch_summary_head">Draw a V to toggle torch</string>
     <!-- haptic feedback  -->
-    <string name="touchscreen_extras">Extras</string>
+    <string name="touchscreen_extras">Haptic feedback</string>
     <string name="haptic_feedback">Haptic feedback</string>
     <string name="haptic_feedback_summary">Vibrate when a gesture got detected</string>
     <!-- Proximity wake -->
@@ -41,4 +41,37 @@
     <string name="vib_strength_title_head">Strength</string>
     <string name="vib_strength_summary_head">Define the strength of the vibrator</string>
     <string name="vib_test">Test</string>
+    <string-array
+        name="haptic_feedback_array_name">
+        <item>Play/Pause</item>
+        <item>Previous track</item>
+        <item>Next track</item>
+        <item>Flashlight</item>
+    </string-array>
+    <string-array
+        name="haptic_feedback_array_value">
+        <item>touchscreen_gesture_play_pause_feedback</item>
+        <item>touchscreen_gesture_previous_feedback</item>
+        <item>touchscreen_gesture_next_feedback</item>
+        <item>touchscreen_gesture_torch_feedback</item>
+    </string-array>
+    <string-array name="empty_array"/>
+    
+    <!-- launch action  -->
+    <string name="touchscreen_action_title">Launch action</string>
+    
+    <string name="touchscreen_action_title_flashlight">Flashlight</string>
+    <string name="touchscreen_action_title_flashlight_summary">Loading...</string>
+    
+    <string name="touchscreen_action_title_play">Play/Pause</string>
+    <string name="touchscreen_action_title_play_summary">Loading...</string>
+    
+    <string name="touchscreen_action_title_previous">Previous</string>
+    <string name="touchscreen_action_title_previous_summary">Loading...</string>
+    
+    <string name="touchscreen_action_title_next">Next</string>
+    <string name="touchscreen_action_title_next_summary">Loading...</string>
+    
+    <string name="touchscreen_action_default">Default action</string>
+    <string name="touchscreen_action_unkownappforpackagename">(Unkown)</string>
 </resources>
