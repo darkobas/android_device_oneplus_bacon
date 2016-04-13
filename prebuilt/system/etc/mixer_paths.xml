@@ -927,6 +927,10 @@
         <path name="speaker-stereo-dmic-ef" />
     </path>
 
+    <path name="voice-rec-dmic-ef-fluence">
+	<path name="speaker-stereo-dmic-ef" />
+    </path>
+
     <!-- TTY devices -->
     <path name="tty-headphones">
         <ctl name="SLIM RX1 MUX" value="AIF1_PB" />
