@@ -265,12 +265,12 @@ public class KeyHandler implements DeviceKeyHandler {
         return event.getScanCode() == GESTURE_CIRCLE_SCANCODE;
     }
 
-    private void doHapticFeedback(String key) {
-        boolean enabled = Settings.System.getInt(mContext.getContentResolver(), key, 0) != 0;
-        if(enabled){
-			doHapticFeedback();
-		}
-    }
+        private void doHapticFeedback(String key) {
+            boolean enabled = Settings.System.getInt(mContext.getContentResolver(), key, 0) != 0;
+            if(enabled){
+                doHapticFeedback();
+            }
+        }
 
     private void doHapticFeedback() {
         if (mVibrator == null) {
