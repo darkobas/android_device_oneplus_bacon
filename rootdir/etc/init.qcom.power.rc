@@ -48,7 +48,7 @@ on enable-low-power
     write /sys/kernel/msm_thermal/sampling_ms 10000
     write /sys/kernel/msm_thermal/enabled 1
 
-    write /sys/kernel/cpu_input_boost/ib_freqs "1190400 1190400"
+    write /sys/kernel/cpu_input_boost/ib_freqs "1190400 1497600"
     write /sys/kernel/cpu_input_boost/ib_duration_ms 1000
     write /sys/kernel/cpu_input_boost/enabled 1
 
