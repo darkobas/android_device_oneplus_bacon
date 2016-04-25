@@ -167,6 +167,7 @@ audio.offload.pcm.24bit.enable=true
 
 media.aac_51_output_enabled=true
 mm.enable.smoothstreaming=true
+audio.deep_buffer.media=true
 
 #Fluence
 ro.qc.sdk.audio.fluencetype=fluence 
