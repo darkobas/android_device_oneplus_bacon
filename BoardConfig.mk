@@ -165,6 +165,13 @@ TARGET_NO_RPC := true
 # Sepolicy
 include device/qcom/sepolicy/sepolicy.mk
 
+# QCNE
+BOARD_USES_QCNE := true
+
+ifeq ($(BOARD_USES_QCNE),true)
+TARGET_LDPRELOAD := libNimsWrap.so
+endif
+
 BOARD_SEPOLICY_DIRS += \
         device/oneplus/bacon/sepolicy
 #skip boot jars check if QCPATH not available
