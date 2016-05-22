@@ -14,18 +14,10 @@
 # limitations under the License.
 #
 
-# inherit CodeAurora MSM8974 Board Config
--include device/qcom/msm8974/BoardConfig.mk
+PLATFORM_PATH := device/oneplus/bacon
 
-# Architecture
-TARGET_ARCH := arm
-TARGET_ARCH_VARIANT := armv7-a-neon
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
-TARGET_CPU_VARIANT := krait
- 
 # Include path
-TARGET_SPECIFIC_HEADER_PATH := device/oneplus/bacon/include
+TARGET_SPECIFIC_HEADER_PATH := $(PLATFORM_PATH)/include
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8974
@@ -35,10 +27,35 @@ TARGET_NO_RADIOIMAGE := true
 # Platform
 TARGET_BOARD_PLATFORM := msm8974
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
+QCOM_BOARD_PLATFORMS += msm8974
 
+# Architecture
+TARGET_ARCH := arm
+TARGET_ARCH_VARIANT := armv7-a-neon
+TARGET_CPU_ABI := armeabi-v7a
+TARGET_CPU_ABI2 := armeabi
+TARGET_CPU_VARIANT := krait
+ 
 # Asserts
 TARGET_BOARD_INFO_FILE ?= device/oneplus/bacon/board-info.txt
 TARGET_OTA_ASSERT_DEVICE := bacon,A0001
+
+# Kernel
+TARGET_KERNEL_CONFIG := bacon_defconfig
+KERNEL_DEFCONFIG := bacon_defconfig
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=bacon user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1 zcache.enabled=1 zcache.compressor=lz4
+BOARD_KERNEL_TAGS_OFFSET := 0x01e00000
+BOARD_RAMDISK_OFFSET     := 0x02000000
+BOARD_KERNEL_BASE        := 0x00000000
+BOARD_KERNEL_PAGESIZE    := 2048
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
+TARGET_KERNEL_SOURCE := kernel/oneplus/msm8974
+BOARD_KERNEL_SEPARATED_DT := true
+BOARD_DTBTOOL_ARGS := -2
+TARGET_KERNEL_ARCH := arm
+
+# ANT+
+BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
 # Init
 TARGET_INIT_VENDOR_LIB := libinit_msm
@@ -49,9 +66,7 @@ COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 COMMON_GLOBAL_CPPFLAGS += -DNO_SECURE_DISCARD
 
 # QCOM hardware
-BOARD_USES_QCOM_HARDWARE := false
-TARGET_USES_QCOM_BSP := true
-TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+BOARD_USES_QCOM_HARDWARE := true
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
@@ -62,9 +77,6 @@ AUDIO_FEATURE_ENABLED_NEW_SAMPLE_RATE := true
 AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
 AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := false
 USE_CUSTOM_AUDIO_POLICY := 1
-
-# ANT+
-BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/oneplus/bacon/bluetooth
@@ -84,7 +96,6 @@ TARGET_HW_DISK_ENCRYPTION := true
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 
 # Graphics
-BOARD_EGL_CFG := device/qcom/msm8974/egl.cfg
 TARGET_CONTINUOUS_SPLASH_ENABLED := true
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
@@ -108,20 +119,6 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 13271448576
 BOARD_USERDATAEXTRAIMAGE_PARTITION_SIZE := 59914792960
 BOARD_USERDATAEXTRAIMAGE_PARTITION_NAME := 64G
 TARGET_USERIMAGES_USE_EXT4 := true
-
-# Kernel
-TARGET_KERNEL_CONFIG := bacon_defconfig
-KERNEL_DEFCONFIG := bacon_defconfig
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=bacon user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1 zcache.enabled=1 zcache.compressor=lz4
-BOARD_KERNEL_TAGS_OFFSET := 0x01e00000
-BOARD_RAMDISK_OFFSET     := 0x02000000
-BOARD_KERNEL_BASE        := 0x00000000
-BOARD_KERNEL_PAGESIZE    := 2048
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
-TARGET_KERNEL_SOURCE := kernel/oneplus/msm8974
-BOARD_KERNEL_SEPARATED_DT := true
-BOARD_DTBTOOL_ARGS := -2
-TARGET_KERNEL_ARCH := arm
 
 # GPS
 USE_DEVICE_SPECIFIC_LOC_API := true
@@ -160,6 +157,9 @@ USE_MINIKIN := true
 
 TARGET_KERNEL_HAVE_NTFS := true
 
+# RPC
+TARGET_NO_RPC := true
+
 #WITH_DEXPREOPT := true
 
 # Sepolicy
@@ -167,3 +167,5 @@ include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \
         device/oneplus/bacon/sepolicy
+#skip boot jars check if QCPATH not available
+SKIP_BOOT_JARS_CHECK := true

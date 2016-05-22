@@ -19,13 +19,10 @@ import /init.qcom.power.rc
 import /init.custom.rc
 
 on early-init
-    mount debugfs debugfs /sys/kernel/debug
     chown system system /sys/kernel/debug/kgsl/proc
     write /sys/block/zram0/comp_algorithm lz4
 
 on init
-#    export LD_PRELOAD /system/lib/libboringssl-compat.so
-
     # Set permissions for persist partition
     mkdir /persist 0771 system system
     mkdir /firmware 0771 system system
@@ -188,8 +185,8 @@ on boot
     write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
 
     # Adaptive LMK
-#    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
-#    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
+    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
 
     # msm_thermal (for power HAL usage)
     chown system system /sys/kernel/msm_thermal/user_maxfreq
@@ -506,13 +503,13 @@ service mpdecision /system/bin/mpdecision --avg_comp
    group system
    disabled
 
-#service thermal-engine /system/vendor/bin/thermal-engine
-#   class main
-#   user root
-#   group root
-#   socket thermal-send-client stream 0666 system system
-#   socket thermal-recv-client stream 0660 system system
-#   socket thermal-recv-passive-client stream 0666 system system
+service thermal-engine /system/vendor/bin/thermal-engine
+   class main
+   user root
+   group root
+   socket thermal-send-client stream 0666 system system
+   socket thermal-recv-client stream 0660 system system
+   socket thermal-recv-passive-client stream 0666 system system
 
 service time_daemon /system/bin/time_daemon
     class late_start

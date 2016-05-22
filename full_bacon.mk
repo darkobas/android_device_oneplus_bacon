@@ -17,6 +17,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit from bacon device
 $(call inherit-product, device/oneplus/bacon/device_bacon.mk)
+$(call inherit-product, device/qcom/msm8974/msm8974.mk)
 
 # Inherit AOSParadox vendor
 $(call inherit-product, vendor/darkobas/common.mk)
