@@ -18,7 +18,7 @@
 # call the proprietary setup
 $(call inherit-product-if-exists, vendor/oneplus/bacon/bacon-vendor-blobs.mk)
 $(call inherit-product-if-exists, vendor/oneplus/bacon/bacon-vendor.mk)
-#$(call inherit-product-if-exists, vendor/coloros/find7a/find7a-vendor-blobs.mk)
+$(call inherit-product-if-exists, vendor/coloros/find7a/find7a-vendor-blobs.mk)
 
 # WCNSS
 PRODUCT_COPY_FILES += \
@@ -67,7 +67,8 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui
 
 # Device settings
 PRODUCT_PACKAGES += \
-    Find7Parts
+    Find7Parts \
+    camera-wrapper.msm8974
 
 # never dexopt the keyhandler
 $(call add-product-dex-preopt-module-config,Find7Parts,disable)
