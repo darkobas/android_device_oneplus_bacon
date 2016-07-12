@@ -5,3 +5,4 @@ allow mediaserver socket_device:sock_file { write };
 # 4k2k property
 allow mediaserver camera_prop:property_service set;
 allow mediaserver system_file:file execmod;
+binder_call(mediaserver, audiod)
