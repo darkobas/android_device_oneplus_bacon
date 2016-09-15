@@ -205,7 +205,10 @@ PRODUCT_PACKAGES += \
     Tag \
     com.android.nfc_extras
 
-# Misc dependency packages
+# Telephony-ext
+PRODUCT_PACKAGES += telephony-ext
+PRODUCT_BOOT_JARS += telephony-ext
+
 PRODUCT_PACKAGES += \
     ebtables \
     ethertypes \
