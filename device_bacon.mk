@@ -77,6 +77,11 @@ $(call add-product-dex-preopt-module-config,Find7Parts,disable)
 PRODUCT_PACKAGES += \
     gps.msm8974
 
+# Keystore
+PRODUCT_PACKAGES += \
+    keystore.msm8974 \
+    gatekeeper.msm8974
+
 # Lights
 PRODUCT_PACKAGES += \
     lights.msm8974
