@@ -2,6 +2,9 @@
 # system.prop for one+
 #
 
+# Bluetooth
+qcom.bluetooth.soc=smd
+
 ro.sf.lcd_density=480
 persist.hwc.mdpcomp.enable=true
 persist.radio.add_power_save=1
