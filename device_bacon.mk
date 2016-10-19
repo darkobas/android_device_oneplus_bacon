@@ -61,8 +61,9 @@ PRODUCT_PACKAGE_OVERLAYS += device/oneplus/bacon/overlay
 #PRODUCT_PACKAGES += \
 #    com.dsi.ant.antradio_library
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    media.stagefright.codecremote=false
+# Charger
+PRODUCT_PACKAGES += \
+    charger_res_images
 
 # Dalvik/HWUI
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
