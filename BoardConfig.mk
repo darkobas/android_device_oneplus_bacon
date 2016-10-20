@@ -43,7 +43,7 @@ TARGET_OTA_ASSERT_DEVICE := bacon,A0001
 # Kernel
 TARGET_KERNEL_CONFIG := bacon_defconfig
 KERNEL_DEFCONFIG := bacon_defconfig
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=bacon user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1 zcache.enabled=1 zcache.compressor=lz4
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=bacon user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1 zcache.enabled=1 zcache.compressor=lz4 androidboot.selinux=permissive 
 BOARD_KERNEL_TAGS_OFFSET := 0x01e00000
 BOARD_RAMDISK_OFFSET     := 0x02000000
 BOARD_KERNEL_BASE        := 0x00000000
