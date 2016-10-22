@@ -11,18 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# Inherit omni-specific board config
+include device/oneplus/bacon/BoardConfigOmni.mk
 
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+$(call inherit-product, vendor/omni/config/gsm.mk)
+
+# Inherit from the common Open Source product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
+
+# must be before including omni part
+TARGET_BOOTANIMATION_SIZE := 1080x608
+
+# Inherit from our custom product configuration
+$(call inherit-product, vendor/omni/config/common.mk)
 
 # Inherit from bacon device
 $(call inherit-product, device/oneplus/bacon/device_bacon.mk)
-$(call inherit-product, device/qcom/msm8974/msm8974.mk)
 
-# Inherit AOSParadox vendor
-$(call inherit-product, vendor/darkobas/common.mk)
-
-PRODUCT_NAME := full_bacon
+PRODUCT_NAME := omni_bacon
 PRODUCT_DEVICE := bacon
 PRODUCT_MANUFACTURER := OnePlus
 PRODUCT_MODEL := A0001

@@ -11,4 +11,3 @@ r_dir_file(system_server, sysfs_usb_supply);
 #from omni
 allow system_server time_daemon:unix_stream_socket connectto;
 allow system_server apk_data_file:sock_file { read write getattr };
-allow system_server cache_file:file { execute };

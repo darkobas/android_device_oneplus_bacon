@@ -14,4 +14,5 @@
 # limitations under the License.
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/full_bacon.mk
+    $(LOCAL_DIR)/device_bacon.mk \
+    $(LOCAL_DIR)/omni_bacon.mk

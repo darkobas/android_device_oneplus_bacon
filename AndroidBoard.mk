@@ -1,6 +1,9 @@
-LOCAL_PATH := $(call my-dir)
+CAL_PATH := $(call my-dir)
 
-#----------------------------------------------------------------------
-# extra images
-#----------------------------------------------------------------------
-include build/core/generate_extra_images.mk
+include $(CLEAR_VARS)
+
+ALL_PREBUILT += $(INSTALLED_KERNEL_TARGET)
+
+# include the non-open-source counterpart to this file
+-include vendor/oneplus/bacon/BoardConfigVendor.mk
+

@@ -58,8 +58,8 @@ DEVICE_PACKAGE_OVERLAYS += device/oneplus/bacon/overlay
 PRODUCT_PACKAGE_OVERLAYS += device/oneplus/bacon/overlay
 
 # ANT+
-PRODUCT_PACKAGES += \
-    com.dsi.ant.antradio_library
+#PRODUCT_PACKAGES += \
+#    com.dsi.ant.antradio_library
 
 # Dalvik/HWUI
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
@@ -67,7 +67,6 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui
 
 # Device settings
 PRODUCT_PACKAGES += \
-    Find7Parts \
     camera-wrapper.msm8974
 
 # never dexopt the keyhandler
@@ -94,7 +93,6 @@ PRODUCT_COPY_FILES += \
 
 # Permissions
 PRODUCT_COPY_FILES += \
-    external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/etc/permissions/com.dsi.ant.antradio_library.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
@@ -155,7 +153,7 @@ PRODUCT_PACKAGES += \
     librmnetctl
 
 #ANT stack
-PRODUCT_PACKAGES += \
+#PRODUCT_PACKAGES += \
         AntHalService \
         libantradio \
         ANTRadioService \
@@ -214,7 +212,9 @@ PRODUCT_PACKAGES += \
     com.android.nfc_extras
 
 # Telephony-ext
-PRODUCT_PACKAGES += telephony-ext
+PRODUCT_PACKAGES += \
+    telephony-ext
+
 PRODUCT_BOOT_JARS += telephony-ext
 
 PRODUCT_PACKAGES += \
