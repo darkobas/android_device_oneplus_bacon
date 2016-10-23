@@ -28,6 +28,10 @@ $(call inherit-product, vendor/omni/config/common.mk)
 # Inherit from bacon device
 $(call inherit-product, device/oneplus/bacon/device_bacon.mk)
 
+# Snapdragon Camera
+PRODUCT_PACKAGES += \
+    SnapdragonCamera
+
 PRODUCT_NAME := omni_bacon
 PRODUCT_DEVICE := bacon
 PRODUCT_MANUFACTURER := OnePlus
