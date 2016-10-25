@@ -30,6 +30,7 @@ $(call inherit-product, device/oneplus/bacon/device_bacon.mk)
 
 # Snapdragon Camera
 PRODUCT_PACKAGES += \
+    Find7Parts \
     SnapdragonCamera
 
 PRODUCT_NAME := omni_bacon

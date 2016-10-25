@@ -5,6 +5,9 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -83,6 +86,9 @@ public class KeyHandler implements DeviceKeyHandler {
     private final PowerManager mPowerManager;
     private EventHandler mEventHandler;
     private Vibrator mVibrator;
+    private boolean mTorchEnabled;
+    private CameraManager mCameraManager;
+    private String mRearCameraId;
 
     private SensorManager mSensorManager;
     private Sensor mProximitySensor;
@@ -117,6 +123,22 @@ public class KeyHandler implements DeviceKeyHandler {
         }
     }
 
+    private class MyTorchCallback extends CameraManager.TorchCallback {
+        @Override
+        public void onTorchModeChanged(String cameraId, boolean enabled) {
+            if (!cameraId.equals(mRearCameraId))
+                return;
+            mTorchEnabled = enabled;
+        }
+
+        @Override
+        public void onTorchModeUnavailable(String cameraId) {
+            if (!cameraId.equals(mRearCameraId))
+                return;
+            mTorchEnabled = false;
+        }
+    }
+
     public KeyHandler(Context context) {
         mContext = context;
         mEventHandler = new EventHandler();
@@ -126,18 +148,21 @@ public class KeyHandler implements DeviceKeyHandler {
         mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
 
-        final Resources resources = mContext.getResources();
-        mProximityTimeOut = resources.getInteger(
-                com.android.internal.R.integer.config_proximityCheckTimeout);
-        mProximityWakeSupported = resources.getBoolean(
-                com.android.internal.R.bool.config_proximityCheckOnWake);
+        mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+        mCameraManager.registerTorchCallback(new MyTorchCallback(), mEventHandler);  
 
-        if (mProximityWakeSupported) {
-            mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-            mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-            mProximityWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                    "ProximityWakeLock");
-        }
+        final Resources resources = mContext.getResources();
+        //mProximityTimeOut = resources.getInteger(
+        //        com.android.internal.R.integer.config_proximityCheckTimeout);
+        //mProximityWakeSupported = resources.getBoolean(
+        //        com.android.internal.R.bool.config_proximityCheckOnWake);
+
+        //if (mProximityWakeSupported) {
+        //    mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        //    mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        //    mProximityWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+        //            "ProximityWakeLock");
+        //}
 
         mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (mVibrator == null || !mVibrator.hasVibrator()) {
@@ -168,22 +193,20 @@ public class KeyHandler implements DeviceKeyHandler {
                 doHapticFeedback(KEY_NEXT_FEEDBACK); 
                 break;
             case GESTURE_V_SCANCODE:
-                if (!launchIntentFromKey(KEY_TORCH_LAUNCH_INTENT)){ 
+                String rearCameraId = getRearCameraId();
+                if (rearCameraId != null) {
                     mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
-                    Intent torchIntent = new Intent("com.android.systemui.TOGGLE_FLASHLIGHT");
-                    torchIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                    UserHandle user = new UserHandle(UserHandle.USER_CURRENT);
-                    mContext.sendBroadcastAsUser(torchIntent, user);
+                    try {
+                        mCameraManager.setTorchMode(rearCameraId, !mTorchEnabled);
+                        mTorchEnabled = !mTorchEnabled;
+                    } catch (Exception e) {
+                        // Ignore
+                    }
                 }
                 doHapticFeedback(KEY_TORCH_FEEDBACK);
                 break;
             }
         }
-    }
-
-    @Override
-    public boolean canHandleKeyEvent(KeyEvent event) {
-        return ArrayUtils.contains(sSupportedGestures, event.getScanCode());
     }
 
     @Override
@@ -200,16 +223,15 @@ public class KeyHandler implements DeviceKeyHandler {
 
         if (!mEventHandler.hasMessages(GESTURE_REQUEST)) {
             Message msg = getMessageForKeyEvent(scanCode);
-            boolean defaultProximity = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_proximityCheckOnWakeEnabledByDefault);
-            boolean proximityWakeCheckEnabled = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.PROXIMITY_ON_WAKE, defaultProximity ? 1 : 0) == 1;
-            if (mProximityWakeSupported && proximityWakeCheckEnabled && mProximitySensor != null) {
-                mEventHandler.sendMessageDelayed(msg, mProximityTimeOut);
-                processEvent(scanCode);
-            } else {
+            //boolean defaultProximity = mContext.getResources().getBoolean(
+            //    com.android.internal.R.bool.config_proximityCheckOnWakeEnabledByDefault);
+            //boolean proximityWakeCheckEnabled = Settings.System.getInt(mContext.getContentResolver(),
+            //        Settings.System.PROXIMITY_ON_WAKE, defaultProximity ? 1 : 0) == 1;
+            //if (mProximityWakeSupported && proximityWakeCheckEnabled && mProximitySensor != null) {
+            //    mEventHandler.sendMessageDelayed(msg, mProximityTimeOut);
+            //    processEvent(scanCode);
+            //} else {
                 mEventHandler.sendMessage(msg);
-            }
         }
         return true;
     }
@@ -221,11 +243,11 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     private void processEvent(final int scancode) {
-        mProximityWakeLock.acquire();
+        //mProximityWakeLock.acquire();
         mSensorManager.registerListener(new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
-                mProximityWakeLock.release();
+         //       mProximityWakeLock.release();
                 mSensorManager.unregisterListener(this);
                 if (!mEventHandler.hasMessages(GESTURE_REQUEST)) {
                     // The sensor took to long, ignoring.
@@ -283,6 +305,16 @@ public class KeyHandler implements DeviceKeyHandler {
         }
     }
 
+    @Override
+    public boolean canHandleKeyEvent(KeyEvent event) {
+        return ArrayUtils.contains(sSupportedGestures, event.getScanCode());
+    }
+
+    @Override
+    public boolean isDisabledKeyEvent(KeyEvent event) {
+        return false;
+    }
+
     public static void setButtonDisable(Context context) {
         final boolean disableButtons = Settings.System.getInt(
                 context.getContentResolver(), Settings.System.HARDWARE_KEYS_DISABLE, 0) == 1;
@@ -290,32 +322,60 @@ public class KeyHandler implements DeviceKeyHandler {
         Utils.writeValue(BUTTON_DISABLE_FILE, disableButtons ? "0" : "1");
     }
 
-        private void startActivitySafely(Intent intent) {
-            intent.addFlags(
-            Intent.FLAG_ACTIVITY_NEW_TASK
-            | Intent.FLAG_ACTIVITY_SINGLE_TOP
-            | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    private void startActivitySafely(Intent intent) {
+        intent.addFlags(
+        Intent.FLAG_ACTIVITY_NEW_TASK
+        | Intent.FLAG_ACTIVITY_SINGLE_TOP
+        | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        try {
+            UserHandle user = new UserHandle(UserHandle.USER_CURRENT);
+            mContext.startActivityAsUser(intent, null, user);
+        } catch (ActivityNotFoundException e) {
+            // Ignore
+        }
+    }
+
+    @Override
+    public boolean isWakeEvent(KeyEvent event){
+        if (event.getAction() != KeyEvent.ACTION_UP) {
+            return false;
+        }
+        return event.getScanCode() == KEY_DOUBLE_TAP;
+    }
+
+    private boolean launchIntentFromKey(String key){
+        String packageName = Settings.System.getString(mContext.getContentResolver(), key);
+        Intent intent = null;
+        if(packageName != null && !packageName.equals("")){
+            intent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
+        }
+        if(intent != null){
+            mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
+            mPowerManager.wakeUp(SystemClock.uptimeMillis());
+            mContext.sendBroadcastAsUser(new Intent(ACTION_DISMISS_KEYGUARD), UserHandle.CURRENT);
+            startActivitySafely(intent);
+            return true;
+        }
+        return false;
+    }
+
+    private String getRearCameraId() {
+        if (mRearCameraId == null) {
             try {
-                UserHandle user = new UserHandle(UserHandle.USER_CURRENT);
-                mContext.startActivityAsUser(intent, null, user);
-            } catch (ActivityNotFoundException e) {
+                for (final String cameraId : mCameraManager.getCameraIdList()) {
+	            CameraCharacteristics c = mCameraManager.getCameraCharacteristics(cameraId);
+	            Boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+	            Integer lensFacing = c.get(CameraCharacteristics.LENS_FACING);
+	            if (flashAvailable != null && flashAvailable
+	                    && lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                        mRearCameraId = cameraId;
+                        break;
+                    }
+                }
+            } catch (CameraAccessException e) {
                 // Ignore
             }
         }
-
-        private boolean launchIntentFromKey(String key){
-            String packageName = Settings.System.getString(mContext.getContentResolver(), key);
-            Intent intent = null;
-            if(packageName != null && !packageName.equals("")){
-                intent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
-            }
-            if(intent != null){
-                mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
-                mPowerManager.wakeUp(SystemClock.uptimeMillis());
-                mContext.sendBroadcastAsUser(new Intent(ACTION_DISMISS_KEYGUARD), UserHandle.CURRENT);
-                startActivitySafely(intent);
-                return true;
-            }
-            return false;
-        }
+        return mRearCameraId;
+    }
 }
