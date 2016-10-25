@@ -139,10 +139,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     power.bacon
 
-# Keystore
-PRODUCT_PACKAGES += \
-    keystore.msm8974
-
 # Graphics
 PRODUCT_PACKAGES += \
     copybit.msm8974 \
