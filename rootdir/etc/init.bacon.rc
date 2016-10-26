@@ -193,6 +193,9 @@ on boot
 
     chown system system /data/misc/zoneinfo/current/icu/icu_tzdata.dat
 
+    # change this when HAL3 is working
+    setprop persist.camera.HAL3.enabled 0
+
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
 
