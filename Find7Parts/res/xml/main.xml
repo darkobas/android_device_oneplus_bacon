@@ -24,12 +24,12 @@
                         android:entryValues="@array/haptic_feedback_array_value"
                         android:defaultValue="@array/empty_array" />
 
-                <org.omnirom.device.SystemSettingSwitchPreference
+<!--                <org.omnirom.device.SystemSettingSwitchPreference
                     android:key="proximity_on_wake"
                     android:title="@string/proximity_wake_title"
                     android:summary="@string/proximity_wake_summary"
                     android:defaultValue="true" />
-
+-->
 	</PreferenceCategory>
 	<PreferenceCategory
         android:title="@string/category_vibrator">
