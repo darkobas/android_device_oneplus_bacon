@@ -2,13 +2,13 @@
 # system.prop for one+
 #
 
-# Bluetooth
-qcom.bluetooth.soc=smd
-
-# Camera
+#Camera Hacks
 camera2.portability.force_api=1
 media.stagefright.legacyencoder=true
 media.stagefright.less-secure=true
+
+# Bluetooth
+qcom.bluetooth.soc=smd
 
 # Display
 ro.sf.lcd_density=480
