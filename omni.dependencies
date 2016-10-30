@@ -16,5 +16,17 @@
     "repository": "android_hardware_qcom_display-caf-msm8974",
     "target_path": "hardware/qcom/display-caf-msm8974",
     "revision": "android-7.0"
+  },
+  {
+    "remote": "omnirom",
+    "repository": "vendor_qcom_opensource_dataservices",
+    "target_path": "vendor/qcom/opensource/dataservices",
+    "revision": "android-7.0"
+  },
+  {
+    "remote": "omnirom",
+    "repository": "android_vendor_codeaurora_telephony",
+    "target_path": "vendor/codeaurora/telephony",
+    "revision": "android-7.0"
   }
 ]
