@@ -61,6 +61,7 @@ PRODUCT_PACKAGE_OVERLAYS += device/oneplus/bacon/overlay
 #PRODUCT_PACKAGES += \
 #    com.dsi.ant.antradio_library
 
+
 # Charger
 PRODUCT_PACKAGES += \
     charger_res_images
@@ -71,6 +72,7 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui
 
 # Device settings
 PRODUCT_PACKAGES += \
+    libshim_camera \
     camera-wrapper.msm8974
 
 # never dexopt the keyhandler
