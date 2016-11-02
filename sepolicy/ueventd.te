@@ -1,0 +1,4 @@
+allow ueventd sysfs_vibrator:file { write open };
+allow ueventd vfat:dir search;
+allow ueventd vfat:file { read open getattr };
+

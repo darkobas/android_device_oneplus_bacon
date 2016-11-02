@@ -17,3 +17,6 @@
 /persist/.bt_nv.bin                                     u:object_r:bluetooth_data_file:s0
 
 /sys/class/leds/button-backlight/brightness             u:object_r:proc_touchpanel:s0
+
+/dev/block/platform/msm_sdcc\.1/by-name/cache           u:object_r:cache_block_device:s0
+
