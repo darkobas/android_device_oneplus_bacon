@@ -14,3 +14,6 @@ allow system_server apk_data_file:sock_file { read write getattr };
 
 allow system_server unlabeled:file unlink;
 
+# Persistent properties
+allow system_server persist_property_file:dir rw_dir_perms;
+allow system_server persist_property_file:file { create_file_perms unlink };

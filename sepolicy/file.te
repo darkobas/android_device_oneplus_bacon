@@ -1,2 +1,3 @@
 type proc_touchpanel, fs_type;
 type sysfs_vibrator, fs_type, sysfs_type;
+type persist_property_file, file_type;

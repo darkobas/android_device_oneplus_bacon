@@ -91,6 +91,7 @@ BOARD_GLOBAL_CFLAGS += -DOPPO_CAMERA_HARDWARE -DCAMERA_VENDOR_L_COMPAT
 # Crypto
 TARGET_HW_DISK_ENCRYPTION := true
 TARGET_CRYPTFS_HW_PATH := device/oneplus/bacon/cryptfs_hw
+
 # Tap to wake
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 
@@ -122,9 +123,6 @@ TARGET_USERIMAGES_USE_EXT4 := true
 # GPS
 USE_DEVICE_SPECIFIC_LOC_API := true
 USE_DEVICE_SPECIFIC_GPS := true
-
-# Keystore
-TARGET_PROVIDES_KEYMASTER := true
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
