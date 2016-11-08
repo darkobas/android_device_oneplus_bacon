@@ -20,6 +20,7 @@ package org.omnirom.device;
 import android.os.Bundle;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference;
+import android.preference.PreferenceScreen;
 import android.preference.PreferenceActivity;
 import android.preference.TwoStatePreference;
 import android.preference.SwitchPreference;
@@ -57,10 +58,13 @@ public class DeviceSettings extends PreferenceActivity implements OnPreferenceCh
 			"touchscreen_gesture_previous_launch_intent";  
     private static final String KEY_NEXT_LAUNCH_INTENT = "touchscreen_gesture_next_launch_intent";
 
+    public static final String KEY_PROXI_SWITCH = "proxi";
+
     private TwoStatePreference mCameraSwitch;
     private TwoStatePreference mMusicSwitch;
     private TwoStatePreference mTorchSwitch;
     private VibratorStrengthPreference mVibratorStrength;
+    private TwoStatePreference mProxiSwitch;
 
     private MultiSelectListPreference mHapticFeedback;
     private ListPreference mTorchLaunchIntent;
@@ -107,6 +111,10 @@ public class DeviceSettings extends PreferenceActivity implements OnPreferenceCh
         
         mNextLaunchIntent = (ListPreference) findPreference(KEY_NEXT_LAUNCH_INTENT);   
         mNextLaunchIntent.setOnPreferenceChangeListener(this);
+
+        mProxiSwitch = (TwoStatePreference) findPreference(KEY_PROXI_SWITCH);
+        mProxiSwitch.setChecked(Settings.System.getInt(getContentResolver(),
+                Settings.System.DEVICE_PROXI_CHECK_ENABLED, 1) != 0);
         
         new InitListTask().execute();
     }
@@ -121,6 +129,16 @@ public class DeviceSettings extends PreferenceActivity implements OnPreferenceCh
             break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == mProxiSwitch) {
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.DEVICE_PROXI_CHECK_ENABLED, mProxiSwitch.isChecked() ? 1 : 0);
+            return true;
+        }
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
     @Override

@@ -2,8 +2,10 @@ package org.omnirom.device;
 
 import android.content.ActivityNotFoundException;
 import android.app.KeyguardManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
@@ -63,7 +65,7 @@ public class KeyHandler implements DeviceKeyHandler {
     private static final int GESTURE_V_SCANCODE = 252;
     private static final int GESTURE_LTR_SCANCODE = 253;
     private static final int GESTURE_GTR_SCANCODE = 254;
-    private static final int KEY_DOUBLE_TAP = 255;
+    private static final int KEY_DOUBLE_TAP = 143;
 
     private static final int[] sSupportedGestures = new int[]{
         GESTURE_CIRCLE_SCANCODE,
@@ -75,6 +77,14 @@ public class KeyHandler implements DeviceKeyHandler {
     };
 
     private static final int[] sHandledGestures = new int[]{
+        GESTURE_SWIPE_DOWN_SCANCODE,
+        GESTURE_LTR_SCANCODE,
+        GESTURE_GTR_SCANCODE,
+        GESTURE_V_SCANCODE
+    };
+
+    private static final int[] sProxiCheckedGestures = new int[]{
+        GESTURE_CIRCLE_SCANCODE,
         GESTURE_SWIPE_DOWN_SCANCODE,
         GESTURE_LTR_SCANCODE,
         GESTURE_GTR_SCANCODE,
@@ -91,15 +101,27 @@ public class KeyHandler implements DeviceKeyHandler {
     private String mRearCameraId;
 
     private SensorManager mSensorManager;
-    private Sensor mProximitySensor;
-    WakeLock mProximityWakeLock;
+    private Sensor mSensor;
+    private boolean mProxyIsNear;
+    private boolean mUseProxiCheck;
+
     WakeLock mGestureWakeLock;
     Message msg;
-    private int mProximityTimeOut;
-    private boolean mProximityWakeSupported;
     private Handler mHandler = new Handler();
     private KeyguardManager mKeyguardManager;
     private SettingsObserver mSettingsObserver;
+
+    private SensorEventListener mProximitySensor = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            mProxyIsNear = event.values[0] < mSensor.getMaximumRange();
+            if (DEBUG) Log.d(TAG, "mProxyIsNear = " + mProxyIsNear);
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
 
     private class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -109,6 +131,9 @@ public class KeyHandler implements DeviceKeyHandler {
         void observe() {
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HARDWARE_KEYS_DISABLE),
+                    false, this);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DEVICE_PROXI_CHECK_ENABLED),
                     false, this);
             update();
         }
@@ -120,6 +145,8 @@ public class KeyHandler implements DeviceKeyHandler {
 
         public void update() {
             setButtonDisable(mContext);
+            mUseProxiCheck = Settings.System.getInt(
+                    mContext.getContentResolver(), Settings.System.DEVICE_PROXI_CHECK_ENABLED, 1) == 1;
         }
     }
 
@@ -139,6 +166,17 @@ public class KeyHandler implements DeviceKeyHandler {
         }
     }
 
+    private BroadcastReceiver mScreenStateReceiver = new BroadcastReceiver() {
+         @Override
+         public void onReceive(Context context, Intent intent) {
+             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                 onDisplayOn();
+             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                 onDisplayOff();
+             }
+         }
+    };
+
     public KeyHandler(Context context) {
         mContext = context;
         mEventHandler = new EventHandler();
@@ -152,17 +190,11 @@ public class KeyHandler implements DeviceKeyHandler {
         mCameraManager.registerTorchCallback(new MyTorchCallback(), mEventHandler);  
 
         final Resources resources = mContext.getResources();
-        //mProximityTimeOut = resources.getInteger(
-        //        com.android.internal.R.integer.config_proximityCheckTimeout);
-        //mProximityWakeSupported = resources.getBoolean(
-        //        com.android.internal.R.bool.config_proximityCheckOnWake);
-
-        //if (mProximityWakeSupported) {
-        //    mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        //    mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        //    mProximityWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-        //            "ProximityWakeLock");
-        //}
+        mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        IntentFilter screenStateFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        mContext.registerReceiver(mScreenStateReceiver, screenStateFilter);
 
         mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (mVibrator == null || !mVibrator.hasVibrator()) {
@@ -223,14 +255,6 @@ public class KeyHandler implements DeviceKeyHandler {
 
         if (!mEventHandler.hasMessages(GESTURE_REQUEST)) {
             Message msg = getMessageForKeyEvent(scanCode);
-            //boolean defaultProximity = mContext.getResources().getBoolean(
-            //    com.android.internal.R.bool.config_proximityCheckOnWakeEnabledByDefault);
-            //boolean proximityWakeCheckEnabled = Settings.System.getInt(mContext.getContentResolver(),
-            //        Settings.System.PROXIMITY_ON_WAKE, defaultProximity ? 1 : 0) == 1;
-            //if (mProximityWakeSupported && proximityWakeCheckEnabled && mProximitySensor != null) {
-            //    mEventHandler.sendMessageDelayed(msg, mProximityTimeOut);
-            //    processEvent(scanCode);
-            //} else {
                 mEventHandler.sendMessage(msg);
         }
         return true;
@@ -240,30 +264,6 @@ public class KeyHandler implements DeviceKeyHandler {
         Message msg = mEventHandler.obtainMessage(GESTURE_REQUEST);
         msg.arg1 = scancode;
         return msg;
-    }
-
-    private void processEvent(final int scancode) {
-        //mProximityWakeLock.acquire();
-        mSensorManager.registerListener(new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-         //       mProximityWakeLock.release();
-                mSensorManager.unregisterListener(this);
-                if (!mEventHandler.hasMessages(GESTURE_REQUEST)) {
-                    // The sensor took to long, ignoring.
-                    return;
-                }
-                mEventHandler.removeMessages(GESTURE_REQUEST);
-                if (event.values[0] == mProximitySensor.getMaximumRange()) {
-                    Message msg = getMessageForKeyEvent(scancode);
-                    mEventHandler.sendMessage(msg);
-                }
-            }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-
-        }, mProximitySensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void dispatchMediaKeyWithWakeLockToMediaSession(int keycode) {
@@ -312,6 +312,12 @@ public class KeyHandler implements DeviceKeyHandler {
 
     @Override
     public boolean isDisabledKeyEvent(KeyEvent event) {
+        boolean isProxyCheckRequired = mUseProxiCheck &&
+                ArrayUtils.contains(sProxiCheckedGestures, event.getScanCode());
+        if (mProxyIsNear && isProxyCheckRequired) {
+            if (DEBUG) Log.i(TAG, "isDisabledKeyEvent: blocked by proxi sensor - scanCode=" + event.getScanCode());
+            return true;
+        }
         return false;
     }
 
@@ -377,5 +383,20 @@ public class KeyHandler implements DeviceKeyHandler {
             }
         }
         return mRearCameraId;
+    }
+
+    private void onDisplayOn() {
+        if (mUseProxiCheck) {
+            if (DEBUG) Log.d(TAG, "Display on");
+            mSensorManager.unregisterListener(mProximitySensor, mSensor);
+        }
+    }
+
+    private void onDisplayOff() {
+        if (mUseProxiCheck) {
+            if (DEBUG) Log.d(TAG, "Display off");
+            mSensorManager.registerListener(mProximitySensor, mSensor,
+                        SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 }
