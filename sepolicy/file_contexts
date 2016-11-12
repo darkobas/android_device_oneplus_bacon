@@ -23,4 +23,3 @@
 /dev/block/platform/msm_sdcc\.1/by-name/cache           u:object_r:cache_block_device:s0
 /dev/block/platform/msm_sdcc\.1/by-name/reserve4        u:object_r:misc_block_device:s0
 /dev/block/platform/msm_sdcc\.1/by-name/persist         u:object_r:persist_block_device:s0
-
