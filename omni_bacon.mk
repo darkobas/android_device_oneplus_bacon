@@ -34,8 +34,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Snapdragon Camera
 PRODUCT_PACKAGES += \
-    Find7Parts \
-    SnapdragonCamera
+    Find7Parts 
 
 PRODUCT_NAME := omni_bacon
 PRODUCT_DEVICE := bacon
