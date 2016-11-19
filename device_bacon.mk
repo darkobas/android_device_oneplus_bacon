@@ -157,6 +157,10 @@ PRODUCT_PACKAGES += \
         ANTRadioService \
         antradio_app
 
+# Widevine
+PRODUCT_PACKAGES += \
+    libshim_wvm
+
 PRODUCT_PACKAGES += \
     hostapd \
     wcnss_service \
